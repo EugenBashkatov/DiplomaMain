@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import csv
 
 
-def logistic_distribution(par_size,par_scale):
+def logistic_distribution(par_size,par_scale, ploting = False):
     logis = logistic.rvs(size=par_size, scale = par_scale)
     x_logistic = []
     logistic_data = []
@@ -15,12 +15,12 @@ def logistic_distribution(par_size,par_scale):
         x_logistic.append(i)
         logistic_data.append([i,logis[i]])
     print(logistic_data)
-
-    plt.plot(x_logistic,logis)
-    plt.show()
+    if ploting == True:
+        plt.plot(x_logistic,logis)
+        plt.show()
     return logistic_data
 
-def normal_distribution(par_size,par_scale):
+def normal_distribution(par_size,par_scale, ploting = False):
     normal = norm.rvs(size=par_size, scale = par_scale)
     x_normal = []
     normal_data = []
@@ -29,8 +29,9 @@ def normal_distribution(par_size,par_scale):
         normal_data.append([i,normal[i]])
     # print(normal_data)
     # plt.bar(x_normal, normal, align='center')
-    plt.plot(x_normal,normal)
-    plt.show()
+    if ploting == True:
+        plt.plot(x_normal,normal)
+        plt.show()
     return normal_data
 
 def create_dis_csv(data):
@@ -39,5 +40,5 @@ def create_dis_csv(data):
         writer.writerows(data)
 
 
-create_dis_csv(normal_distribution(5,1))
+# create_dis_csv(normal_distribution(5,1))
 

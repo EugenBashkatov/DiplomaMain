@@ -26,12 +26,12 @@ def print_hi(name):
 if __name__ == '__main__':
     print_hi('PyCharm')
 
-def change_input_data(switch,par_size = 10, par_scale = 5):
+def change_input_data(switch,par_size = 10, par_scale = 5, ploting = False):
     if switch == 'normal':
-        data = distributions.normal_distribution(par_size,par_scale)
+        data = distributions.normal_distribution(par_size,par_scale, ploting)
         max_dim = len(data)
     if switch == 'logistic':
-        data = distributions.logistic_distribution(par_size, par_scale)
+        data = distributions.logistic_distribution(par_size, par_scale, ploting)
         max_dim = len(data)
     if switch == "daily-test":
         df = pd.read_csv("daily-min-temperatures-01.csv",
@@ -147,14 +147,28 @@ def build_graph_with_clusters(start_point, max_dim, DEBUG = False):
 
     return graph_array
 
+def mean_of_clusters(graph_array):
+    clusters_num = 0
+    data_size = graph_array[1].size
+    for i in range(0,data_size):
+        if graph_array[i][i] != 0:
+            clusters_num += 1
 
-data_list = change_input_data("daily-30")[0]
+    mean = clusters_num/data_size
 
 
-max_dim = change_input_data("daily-30")[1]
+
+    return mean
+
+data_list = change_input_data("logistic",1000)[0]
+
+
+max_dim = change_input_data("logistic",1000)[1]
 
 
 graph_array = build_graph_with_clusters(0,max_dim, True)
+
+print(mean_of_clusters(graph_array))
 print(graph_array)
 
 plt.matshow(graph_array)
