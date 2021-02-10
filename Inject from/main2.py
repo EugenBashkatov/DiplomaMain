@@ -8,10 +8,11 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 import xlsxwriter
 
-
+DEBUG=False
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
@@ -25,29 +26,47 @@ if __name__ == '__main__':
 
 input_file_name='daily-min-temperatures-03.csv'
 df = pd.read_csv(input_file_name,
-                 names=['Date', 'MinTemp', 'RayFrom', 'RayTo', 'dx', 'dy', 'K', 'B', 'FLiine'])
+                 names=['Date', 'MinTemp'])
 
+#TODO сделать одномерный массив data_list заполнить для замены дат
 data_list = df.to_numpy()
+max_dim=len(data_list)
+new_ind=np.arange(0,max_dim)
+data_list[:,0]=new_ind # Замена даты на порядковый номер (index)
+#TODO построить
+# tips_df = sns.load_dataset('tips')
+# tips_df.head()
+# plt.show()
 
+
+#
+# TODO замена дат порядковыми номероми
+# for ind in range(0,len(df)):
+#     new_ind.append(ind)
+#     print("new_ind:", ind, new_ind[ind])
+#data_list[:,0]=new_ind
+if DEBUG:
+    for ind in range(0,len(df)): print("DEBUG_3:", ind, df)
 
 def line(x0, x1, x):
-    y0 = data_list[x0][1]
-    y1 = data_list[x1][1]
+    y0 = data_list[x0]
+    y1 = data_list[x1]
 
     k = (y1 - y0) / (x1 - x0)
     B = (x1 * y0 - x0 * y1) / (x1 - x0)
-    eps = 1.e-3
-    return [k, B, k * x + B, (k * x + B - data_list[x][1]) <= 0]
+    # eps = 1.e-3
+    #return [k, B, k * x + B, (k * x + B - data_list[x]) <= 0]
+    return k
 
 
 def is_visible(x0, x1, x):
-    y0 = data_list[x0][1]
-    y1 = data_list[x1][1]
+    y0 = data_list[x0]
+    y1 = data_list[x1]
 
     k = (y1 - y0) / (x1 - x0)
     B = (x1 * y0 - x0 * y1) / (x1 - x0)
-    eps = 1.e-3
-    return (k * x + B - data_list[x][1]) <= 0
+    # eps = 1.e-3
+    return (k * x + B - data_list[x] <= 0)
 
 
 max_dim = sum(1 for my_line in open(input_file_name,'r'))
@@ -64,16 +83,16 @@ def build_graph_with_clusters(start_point, max_dim, DEBUG = False):
 
     array_k = []
     while True:
-        vis_k = line(x0, x1, x1)[0]
-        vis_k_next = line(x0, x1 + 1, x1 + 1)[0]
+        vis_k = line(x0, x1, x1)
+        vis_k_next = line(x0, x1 + 1, x1 + 1)
 
         x1 = x0+1
         x2 = x1+1
 
         while x1 <= max_dim - 2:
-            vis_k = line(x0, x1, x1)[0]
+            vis_k = line(x0, x1, x1)
              # x2 = x1+1
-            vis_k_next = line(x0, x2, x1)[0]
+            vis_k_next = line(x0, x2, x1)
             graph_array[x0][x0] = cluster_size
             if DEBUG:print("DEBUG_1:GFrom= ", x0, "To= ", x1, "k= ", vis_k, "Next= ", x2, "next_k=", vis_k_next,cluster_size)
             array_k.append([x0, x1, vis_k, vis_k_next, cluster_size])

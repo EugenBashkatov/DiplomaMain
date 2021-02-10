@@ -8,6 +8,10 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats import logistic
+from scipy.stats import norm
+import seaborn as sns
+import distributions
 
 import xlsxwriter
 
@@ -22,12 +26,44 @@ def print_hi(name):
 if __name__ == '__main__':
     print_hi('PyCharm')
 
+def change_input_data(switch,par_size = 10, par_scale = 5, ploting = False):
+    if switch == 'normal':
+        data = distributions.normal_distribution(par_size,par_scale, ploting)
+        max_dim = len(data)
+    if switch == 'logistic':
+        data = distributions.logistic_distribution(par_size, par_scale, ploting)
+        max_dim = len(data)
+    if switch == "daily-test":
+        df = pd.read_csv("daily-min-temperatures-01.csv",
+                         names=['Date', 'MinTemp'])
+        data = df.to_numpy()
+        max_dim = sum(1 for my_line in open("daily-min-temperatures-01.csv", 'r'))
+    if switch == "daily-10":
+        df = pd.read_csv("daily-min-temperatures-02.csv",
+                         names=['Date', 'MinTemp'])
+        data = df.to_numpy()
+        max_dim = sum(1 for my_line in open("daily-min-temperatures-02.csv", 'r'))
+    if switch == "daily-30":
+        df = pd.read_csv("daily-min-temperatures-03.csv",
+                         names=['Date', 'MinTemp'])
+        data = df.to_numpy()
+        max_dim = sum(1 for my_line in open("daily-min-temperatures-03.csv", 'r'))
 
-input_file_name='daily-min-temperatures-03.csv'
-df = pd.read_csv(input_file_name,
-                 names=['Date', 'MinTemp', 'RayFrom', 'RayTo', 'dx', 'dy', 'K', 'B', 'FLiine'])
 
-data_list = df.to_numpy()
+    return data, max_dim
+
+def clear_data(data_list):
+    x = []
+    new_data = []
+    for i in range(0,len(data_list)):
+        x.append(i)
+        new_data.append(data_list[i][1])
+    # print(normal_data)
+    # plt.bar(x_normal, normal, align='center')
+    plt.plot(x,new_data)
+    plt.show()
+    return new_data
+
 
 
 def line(x0, x1, x):
@@ -49,8 +85,6 @@ def is_visible(x0, x1, x):
     eps = 1.e-3
     return (k * x + B - data_list[x][1]) <= 0
 
-
-max_dim = sum(1 for my_line in open(input_file_name,'r'))
 
 def print_graph_array(graph_array):
     for ind in range(0,len(graph_array)):print(ind,":",graph_array[ind])
@@ -113,12 +147,36 @@ def build_graph_with_clusters(start_point, max_dim, DEBUG = False):
 
     return graph_array
 
+def mean_of_clusters(graph_array):
+    clusters_num = 0
+    data_size = graph_array[1].size
+    for i in range(0,data_size):
+        if graph_array[i][i] != 0:
+            clusters_num += 1
+
+    mean = clusters_num/data_size
+
+
+
+    return mean
+
+data_list = change_input_data("logistic",1)[0]
+
+
+max_dim = change_input_data("logistic",1)[1]
+
+
 graph_array = build_graph_with_clusters(0,max_dim, True)
+
+print(mean_of_clusters(graph_array))
 print(graph_array)
 
 plt.matshow(graph_array)
 
 plt.show()
+
+# g = sns.clustermap(data_list)
+# plt.show()
 
 
 eOutput = pd.DataFrame(graph_array)
