@@ -1,0 +1,60 @@
+[2021-02-16 12:23:09,493] main2.py:43 DEBUG    start
+[2021-02-16 12:26:06,038] main2.py:43 DEBUG    start
+[2021-02-16 12:26:47,277] main2.py:43 DEBUG    start
+[2021-02-16 12:26:47,465] main2.py:236 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:28:21,049] main2.py:43 DEBUG    start
+[2021-02-16 12:29:16,155] main2.py:43 DEBUG    start
+[2021-02-16 12:29:16,155] main2.py:44 DEBUG    lambda
+[2021-02-16 12:30:29,314] main2.py:43 DEBUG    start
+[2021-02-16 12:30:29,501] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:32:14,451] main2.py:43 DEBUG    start
+[2021-02-16 12:32:14,638] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:32:49,297] main2.py:43 DEBUG    start
+[2021-02-16 12:32:49,469] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:33:13,864] main2.py:43 DEBUG    start
+[2021-02-16 12:33:14,020] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:33:40,097] main2.py:43 DEBUG    start
+[2021-02-16 12:33:40,425] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:36:06,895] main2.py:43 DEBUG    start
+[2021-02-16 12:36:07,067] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:36:41,842] main2.py:43 DEBUG    start
+[2021-02-16 12:36:42,367] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:37:13,357] main2.py:43 DEBUG    start
+[2021-02-16 12:37:13,685] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:39:07,164] main2.py:43 DEBUG    start
+[2021-02-16 12:39:07,352] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:40:05,694] main2.py:43 DEBUG    start
+[2021-02-16 12:40:06,007] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:40:36,780] main2.py:43 DEBUG    start
+[2021-02-16 12:40:36,967] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:40:55,713] main2.py:43 DEBUG    start
+[2021-02-16 12:40:56,682] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:42:11,652] main2.py:43 DEBUG    start
+[2021-02-16 12:42:11,824] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:43:48,309] main2.py:43 DEBUG    start
+[2021-02-16 12:43:48,669] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:44:16,984] main2.py:43 DEBUG    start
+[2021-02-16 12:44:17,156] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:46:11,677] main2.py:43 DEBUG    start
+[2021-02-16 12:46:11,848] main2.py:238 INFO     x0=0 x1=1, x2=2
+[2021-02-16 12:49:40,198] main2.py:43 DEBUG    start
+[2021-02-16 12:50:14,042] main2.py:43 DEBUG    start
+[2021-02-16 12:51:16,486] main2.py:43 DEBUG    start
+[2021-02-16 12:53:58,420] main2.py:43 DEBUG    start
+[2021-02-16 12:54:48,981] main2.py:43 DEBUG    start
+[2021-02-16 12:57:05,942] main2.py:43 DEBUG    start
+[2021-02-16 12:58:02,416] main2.py:43 DEBUG    start
+[2021-02-16 13:00:09,094] main2.py:43 DEBUG    start
+[2021-02-16 13:00:54,535] main2.py:43 DEBUG    start
+[2021-02-16 13:01:59,990] main2.py:43 DEBUG    start
+[2021-02-16 13:06:27,261] main2.py:43 DEBUG    start
+[2021-02-16 13:08:01,614] main2.py:43 DEBUG    start
+[2021-02-16 13:09:04,680] main2.py:43 DEBUG    start
+[2021-02-16 13:11:09,733] main2.py:43 DEBUG    start
+[2021-02-16 13:11:26,918] main2.py:43 DEBUG    start
+[2021-02-16 13:11:27,871] main2.py:239 INFO     x0=0 x1=1, x2=2
+[2021-02-16 13:11:58,109] main2.py:43 DEBUG    start
+[2021-02-16 13:11:59,203] main2.py:239 INFO     x0=0 x1=1, x2=2
+[2021-02-16 13:12:57,818] main2.py:43 DEBUG    start
+[2021-02-16 13:12:58,896] main2.py:239 INFO     x0=0 x1=1, x2=2
+[2021-02-16 13:14:03,755] main2.py:43 DEBUG    start
