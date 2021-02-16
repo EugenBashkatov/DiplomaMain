@@ -11,6 +11,7 @@ import logging
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import stem_plot as st
 import datetime as dt
 import seaborn as sns
 # numm=-math.inf
@@ -23,8 +24,26 @@ DEBUG2 = False
 DEBUG3 = False
 DEBUG4 = False
 DEBUG5 = False
+def get_logger(name=__file__, file='log.txt', encoding='utf-8'):
+    log = logging.getLogger(name)
+    log.setLevel(logging.DEBUG)
 
+    formatter = logging.Formatter('[%(asctime)s] %(filename)s:%(lineno)d %(levelname)-8s %(message)s')
 
+    fh = logging.FileHandler(file, encoding=encoding)
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
+
+    sh = logging.StreamHandler(stream=sys.stdout)
+    sh.setFormatter(formatter)
+    log.addHandler(sh)
+
+    return log
+log = get_logger()
+log.debug("start")
+# print = lambda text="": log.debug(text)
+# print("lambda")
+#exit()
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
@@ -35,16 +54,17 @@ def print_hi(name):
 if __name__ == '__main__':
     # print_hi('PyCharm')
     # TODO # почиctить фильтрацию
-    input_file_name = 'daily-min-temperatures.csv'
+    input_file_name = 'daily-min-temperatures-test-3.csv'
     full_df = pd.read_csv(input_file_name, names=['Date', 'MinTemp'],index_col=[0])
-    start_date="1983-01-01"
-    end_date="1983-01-03"
-    df=full_df.loc[start_date:end_date].copy()
+    start_date="1981-01-01"
+    end_date="1981-01-03"
+    df=full_df.loc[start_date:end_date].copy(deep=True)
 
     #df['1983-01-01':'1983-02-01']
 
     print(df,df.dtypes,df.index)
-    df['1983-01-01':'1983-02-01']
+    #df['1983-01-01':'1983-02-01']
+    data_list=df['MinTemp'].tolist()
     # exit()
 
     # between_two_dates = after_start_date & before_end_date
@@ -111,12 +131,17 @@ if __name__ == '__main__':
     # exit()
 # TODO сделать одномерный массив data_list заполнить для замены дат
 #data_list = np.array([[],[]],dtype=np.intp)
-data_list = df.to_numpy()
+data_list = df['MinTemp'].tolist()
+#ddd = np.array(data_list).tolist()
+#print("***DDD***:",type(ddd),type(data_list))
+
 #data_temp = df['Index']
 #pd.DataFrame(data_list).to_csv('data_list-{}.csv'.format(max_dim))
 max_dim = len(df)
 out_data_list_name="data_list from {0} to {1} length {2}.csv".format(start_date,end_date,max_dim)
 new_ind = np.arange(0, max_dim)
+
+st.stemplot(new_ind,data_list)
 pd.DataFrame(data_list).to_csv(out_data_list_name)
 full_df.to_csv("full_df.csv")
 # TODO построить
@@ -135,8 +160,8 @@ full_df.to_csv("full_df.csv")
 #     for ind in range(0,len(df)): print("DEBUG_3:", ind, df)
 
 def line(x0, x1,data_list):
-    y0 = data_list[x0][0]
-    y1 = data_list[x1][0]
+    y0 = data_list[x0]
+    y1 = data_list[x1]
 
     k = (y1 - y0) / (x1 - x0)
     B = (x1 * y0 - x0 * y1) / (x1 - x0)
@@ -173,7 +198,7 @@ def is_cluster_found(x0, x1, x2, data_list, max_dim):
         # print(sys.exc_info())
         vis_k_next = vis_k
     ind = np.argmax([vis_k, vis_k_next])
-    return ind
+    return vis_k,vis_k_next,ind
 
 
 logger = logging.getLogger('simple_example')
@@ -205,12 +230,13 @@ def build_graph_with_clusters(start_point, data_list,max_dim, DEBUG=False):
     cluster_start = start_point  # начало кластера
     x1 = x0 + 1  # рабочая вершина
     x2 = x1 + 1  # контрольная вершина
-    cluster_start = 0
+    cluster_start = x0
     cluster_size=0
     clusters_count = 0
     #cluster_start.append(start_point)
     graph_array = np.eye(max_dim)
-    graph_array.fill(1)
+    graph_array.fill(0)
+    log.info("x0={} x1={}, x2={}".format(x0,x1,x2))
     #if max_dim == 2:  # если всего 2 вершины, матрица 2x2
     #     vis_k = line(x0, x1, x1)
     #     try:
@@ -219,23 +245,24 @@ def build_graph_with_clusters(start_point, data_list,max_dim, DEBUG=False):
     #         # print(e)
     #         # print(sys.exc_info())
     #         vis_k_next = vis_k
-    ind = is_cluster_found(x0,x1,x2,data_list,max_dim)
+    vis_k,vis_k_next,ind = is_cluster_found(x0,x1,x2,data_list,max_dim)
     if ind == 0:
         graph_array[x0][x0] = 2
+        #array_cluster_size[x0]
     else:
         graph_array[x1][x1] = 2
         # graph_array[x0][x0] = 1
         # graph_array[x1][x0] = 1
         return graph_array
     if max_dim == 3:  # если матрица 3x3
-        vis_k = line(x0, x1, data_list)
-        try:
-            vis_k_next = line(x0, x2, data_list)
-        except IndexError as e:
-            # print(e)
-            # print(sys.exc_info())
-            vis_k_next = vis_k
-        ind = is_cluster_found(x0,x1,x2,data_list,max_dim)
+        # vis_k = line(x0, x1, data_list)
+        # try:
+        #     vis_k_next = line(x0, x2, data_list)
+        # except IndexError as e:
+        #     # print(e)
+        #     # print(sys.exc_info())
+        #     vis_k_next = vis_k
+        vis_k,vis_k_next,ind = is_cluster_found(x0,x1,x2,data_list,max_dim)
 
         if ind == 0:
             graph_array[x0][x0] = 2
@@ -244,24 +271,16 @@ def build_graph_with_clusters(start_point, data_list,max_dim, DEBUG=False):
         # graph_array[x1][x1]=2
         return graph_array
     array_k = []
-    array_cluster_start = []
-    array_cluster_sizes = []
+    array_cluster_start = np.arange(0,max_dim)
+    array_cluster_sizes = np.arange(0,max_dim)
+    array_cluster_sizes.fill(1)
     # -----------------------------------------------
-    # Start main algorhithm
+    # Start main algoriithm
     # -----------------------------------------------
 
     while True:
         x1 = x0 + 1
         x2 = x1 + 1
-        vis_k = line(x0, x1, data_list)
-        # vis_k_next = line(x0, x2, x1)
-        try:
-            vis_k_next = line(x0, x2, data_list)
-        except IndexError as e:
-            # print(e)
-            # print(sys.exc_info())
-            vis_k_next = vis_k
-        ind = np.argmax([vis_k, vis_k_next])
 
         # ind=np.argmax([vis_k,vis_k_next])
 
@@ -271,7 +290,7 @@ def build_graph_with_clusters(start_point, data_list,max_dim, DEBUG=False):
         #     graph_array[x1][x0] = 1
         # if x2 >= max_dim:
         #     break
-        vis_k = line(x0, x1, data_list)
+        #vis_k = line(x0, x1, data_list)
         # x2 = x1+1
         # if x2 < max_dim:
         #     vis_k_next = line(x0, x2, x2)
@@ -279,24 +298,29 @@ def build_graph_with_clusters(start_point, data_list,max_dim, DEBUG=False):
         cluster_len = 1
         while x1 <= max_dim - 1:
             x2 = x1+1
-            vis_k = line(x0, x1, data_list)
-            #x2 = x1 + 1
-            try:
-                vis_k_next = line(x0, x2, data_list)
-            except IndexError as e:
-                # print(e)
-                # print(sys.exc_info())
-                vis_k_next = vis_k
-
-            ind = np.argmax([vis_k, vis_k_next])
+            # vis_k = line(x0, x1, data_list)
+            # #x2 = x1 + 1
+            # try:
+            #     vis_k_next = line(x0, x2, data_list)
+            # except IndexError as e:
+            #     # print(e)
+            #     # print(sys.exc_info())
+            #     vis_k_next = vis_k
+            #
+            # ind = np.argmax([vis_k, vis_k_next])
+            vis_k, vis_k_next, ind = is_cluster_found(x0, x1, x2, data_list, max_dim)
             if ind == 0:  # cluster end x0
                 clusters_count += 1
                 cluster_len = 1
-                array_cluster_start.append(cluster_start)
+                #array_cluster_start.append(cluster_start)
+                #array_k.append([x0, x1, vis_k, vis_k_next, cluster_len])
+                array_cluster_sizes[x0]+=1
                 x0 = x1  # новое начало кластера x0=x1
                 x1 = x0 + 1
                 x2 = x1 + 1
                 print("**0****", x0, x1, x2, ind)
+                # array_k.append([x0, x1, x2, vis_k, vis_k_next, cluster_len])
+
                 if DEBUG1: print("DEBUG_1:From= ", x0, "To= ", x1, "k= ", vis_k, "Next= ", x2, "next_k=", vis_k_next,
                                  "cluster_size=", cluster_size, "ind=", ind, "cluster_len=", cluster_len)
             if ind == 1:  # continue cluster x0
@@ -307,7 +331,7 @@ def build_graph_with_clusters(start_point, data_list,max_dim, DEBUG=False):
                 print("**1****", x0, x1, x2, ind)
                 if DEBUG1: print("DEBUG_1:From= ", x0, "To= ", x1, "k= ", vis_k, "Next= ", x2, "next_k=", vis_k_next,
                                  "cluster_size=", cluster_size, "ind=", ind, "cluster_len=", cluster_len)
-            array_k.append([x0, x1, vis_k, vis_k_next, cluster_len])
+            array_k.append([x0, x1, x2,vis_k, vis_k_next, cluster_len])
             x1 += 1
             x2 = x1 + 1
         if x0 > (max_dim - 3):
@@ -365,10 +389,13 @@ def build_graph_with_clusters(start_point, data_list,max_dim, DEBUG=False):
     if DEBUG:
         lenk = len(array_k)
         print("****  Array_k  ****")
-        for ind in range(0, lenk):
-            print("DEBUG_5: ind=", ind, array_k[ind])
+        for i in range(0, lenk):
+            print("DEBUG_5: ind=", i, array_k[i])
         print("******************")
-
+        print("****  Array_cluster_size  ({}) ****".format(clusters_count))
+        for i in range(0, lenk):
+            print("DEBUG_5: ind=", i, array_cluster_sizes[i])
+        print("******************")
     return graph_array
 
 
